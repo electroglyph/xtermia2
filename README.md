@@ -11,7 +11,7 @@ This is a demo that you can copy over a freshly initialized Evennia game.
     - map will be centered in right terminal
     - map legend (if any) will be centered separately
 	- map can be enabled/disabled/updated at will
-    - terminal divider can be adjusted and map will be resized
+    - terminal divider can be adjusted and map will be cropped as necessary
     - (see [examples.py](commands/examples.py))
 - You can hold Enter to spam commands
 - Clickable web links
