@@ -13,10 +13,10 @@ This is a demo that you can copy over a freshly initialized Evennia game.
 	- map can be enabled/disabled/updated at will
     - terminal divider can be adjusted and map will be resized
     - (see [examples.py](commands/examples.py))
-- Up/down arrow to scroll through command history
-- You can hold Enter to spam commands now or type anything else to overwrite last command
+- You can hold Enter to spam commands
 - Clickable web links
 - Completion suggestions based on command history and Evennia commands available at login
+- Up/down arrow to scroll through command history
 - Client side options for font size, screenreader, etc. enter :help for a command list
 - Won't echo commands or add to command history until after login (won't echo password)
 - Sound/music (see [examples.py](commands/examples.py))
