@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+{% load static %}
+<html dir="ltr" lang="en">
+  <head>
+    <style>
+      body, html {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      #terminal-container {
+        display: flex;
+        flex-grow: 1;
+        width: 100%;
+        overflow: hidden;
+        scrollbar-color: #333333 #171717;
+      }
+      .terminal {
+        height: 100%;
+        overflow: hidden;
+      }
+      #left-terminal {
+        width: 50%;
+      }
+      #right-terminal {
+        flex-grow: 1;
+      }
+      #divider {
+        width: 5px;
+        background-color: #333333;
+        cursor: col-resize;
+        height: 100%;
+        flex-shrink: 0;
+      }
+      #input-area-wrapper {
+        width: 100%;
+        flex-shrink: 0;
+        padding: 3px 0;
+        background-color: #333333;
+        /*border-top: 1px solid #070530;*/
+      }
+      #input-box {
+        display: block;
+        width: 100%;
+        background-color: black;
+        color: white;
+        box-sizing: border-box;
+        border: 1px solid #333333;
+        font-family: monospace;
+        font-size: 14px;
+        line-height: 1.4;
+        padding: 6px 8px;
+        resize: none;
+        overflow-y: hidden;
+        min-height: 0;
+      }
+      .xterm .xterm-viewport {
+        width: 100% !important;
+      }
+      #input-box:focus {
+        outline: none;
+        border-color: #333333;
+      }
+    </style>
+    <title> {{game_name}} </title>
+    <meta http-equiv="content-type", content="application/xhtml+xml; charset=UTF-8" />
+    <meta name="author" content="Evennia" />
+    <link rel="icon" type="image/x-icon" href="/static/website/images/evennia_logo.png" />
+    <link
+          rel="preload"
+          href="../static/webclient/fonts/Fira_Custom.ttf"
+          as="font"
+          type="font/ttf"
+          crossorigin />
+    <link rel="preload stylesheet" href="{% static "webclient/fonts/FiraCode.css" %}?{{client_css_version}}" as="style" type="text/css" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static "webclient/css/xterm.css" %}?{{client_css_version}}">
+    <script language="javascript" type="text/javascript">
+        {% if websocket_enabled %}
+            const wsactive = true;
+        {% else %}
+            const wsactive = false;
+        {% endif %}
+        {% if browser_sessid %}
+            const csessid = "{{browser_sessid}}";
+        {% else %}
+            const csessid = false;
+        {% endif %}
+        {% if websocket_url %}
+            const wsurl = "{{websocket_url}}";
+        {% else %}
+            const wsurl = "ws://" + this.location.hostname + ":{{websocket_port}}";
+        {% endif %}
+    </script>
+    <script src="{% static "webclient/js/xterm.js" %}?{{client_js_version}}" language="javascript" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static "webclient/js/addon-fit.js" %}?{{client_js_version}}" language="javascript" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static "webclient/js/addon-unicode11.js" %}?{{client_js_version}}" language="javascript" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static "webclient/js/addon-webgl.js" %}?{{client_js_version}}" language="javascript" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static "webclient/js/addon-web-links.js" %}?{{client_js_version}}" language="javascript" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static "webclient/js/fontfaceobserver.js" %}?{{client_js_version}}" language="javascript" type="text/javascript" charset="utf-8"></script>
+  </head>
+<body>
+  <div id="terminal-container">
+    <div id="left-terminal" class="terminal"></div>
+    <div id="divider"></div>
+    <div id="right-terminal" class="terminal"></div>
+  </div>
+  <div id="input-area-wrapper">
+    <label for="input-box"></label><textarea id="input-box" rows="1" placeholder="Enter command (Shift+Enter for new line, right arrow or tab to use completion)..."></textarea>
+  </div>
+    <script src="{% static "webclient/js/webclient.js" %}?{{client_js_version}}" language="javascript" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>
