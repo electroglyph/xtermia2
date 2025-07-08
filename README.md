@@ -5,6 +5,7 @@ This is a demo that you can copy over a freshly initialized Evennia game.
 ![screenshot](./xtermia2.png)
 
 ### Features
+- Really fast. Rendering is GPU accelerated, full screen animations are feasible.
 - Optional persistent map display
     - send 'map' command to webclient with your map to update the cached map
     - map will be centered in right terminal
