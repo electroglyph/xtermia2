@@ -10,6 +10,7 @@ This is a demo that you can copy over a freshly initialized Evennia game.
     - map will be centered in right terminal
     - map legend (if any) will be centered separately
 	- map can be enabled/disabled/updated at will
+    - terminal divider can be adjusted and map will be resized
     - (see [examples.py](commands/examples.py))
 - Up/down arrow to scroll through command history
 - You can hold Enter to spam commands now or type anything else to overwrite last command
