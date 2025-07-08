@@ -7,7 +7,8 @@ This is a demo that you can copy over a freshly initialized Evennia game.
 ### Features
 - Optional persistent map display
     - send 'map' command to webclient with your map to update the cached map
-    - map will be centered in right half of terminal
+    - map will be centered in right terminal
+    - map legend (if any) will be centered separately
 	- map can be enabled/disabled/updated at will
     - (see [examples.py](commands/examples.py))
 - Up/down arrow to scroll through command history
