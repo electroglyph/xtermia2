@@ -1,5 +1,5 @@
 window.addEventListener('load', () => {
-    const revision = 1;
+    const revision = 2;
     const font = new FontFaceObserver('Fira Custom');
     font.load().then(() => {
         console.log('Font loaded.');
@@ -521,7 +521,7 @@ window.addEventListener('load', () => {
         }
 
         function saveBlob(filename, data) {
-            const blob = new Blob([data], {type: 'text/csv'});
+            const blob = new Blob([data], { type: 'text/csv' });
             if (window.navigator.msSaveOrOpenBlob) {
                 window.navigator.msSaveBlob(blob, filename);
             } else {
@@ -536,9 +536,9 @@ window.addEventListener('load', () => {
 
         let ws_ready = false;
         let ws = new WebSocket(wsurl + '?' + csessid);
-// const unicode11Addon = new Unicode11Addon.Unicode11Addon();
-// term.loadAddon(unicode11Addon);
-// term.unicode.activeVersion = '11';
+        // const unicode11Addon = new Unicode11Addon.Unicode11Addon();
+        // term.loadAddon(unicode11Addon);
+        // term.unicode.activeVersion = '11';
         const webglAddonLeft = new WebglAddon.WebglAddon();
         webglAddonLeft.onContextLoss(e => {
             webglAddonLeft.dispose();
@@ -587,7 +587,7 @@ window.addEventListener('load', () => {
         let map_height = 0;
         let new_map_width = 0;
         let new_map_height = 0;
-        const ansi_color_regex = /\x1B\[[0-9;]+m/g
+        const ansi_color_regex = /\x1B\[[0-9;]+m/g;
         const grey = '\x1B[38;5;243m';
         const reset = '\x1B[0m';
         const command_color = '\x1B[38;5;220m';
@@ -906,13 +906,73 @@ window.addEventListener('load', () => {
             new_map_width = max_len;
         }
 
+        function wrapText(text, width) {
+            if (!text) return text;
+            let result = '';
+            let currentLineLength = 0;
+            let currentColor = '';
+            const words = text.split(/(\s+)/);
+
+            for (let i = 0; i < words.length; i++) {
+                const word = words[i];
+                if (word.length === 0) continue;
+
+                let nextColor = currentColor;
+                const codes = word.match(ansi_color_regex);
+                if (codes) {
+                    for (const code of codes) {
+                        if (code === '\x1B[0m') {
+                            nextColor = '';
+                        } else {
+                            nextColor = code;
+                        }
+                    }
+                }
+
+                if (word.includes('\n')) {
+                    result += word;
+                    const lastNewlineIndex = word.lastIndexOf('\n');
+                    const afterNewline = word.substring(lastNewlineIndex + 1).replace(ansi_color_regex, '');
+                    currentLineLength = afterNewline.length;
+                    currentColor = nextColor;
+                    continue;
+                }
+
+                const visibleWord = word.replace(ansi_color_regex, '');
+                const wordLength = visibleWord.length;
+
+                if (currentLineLength + wordLength > width) {
+                    if (word.match(/^\s+$/)) {
+                        if (currentLineLength > 0) {
+                            result += reset + '\n' + currentColor;
+                            currentLineLength = 0;
+                        }
+                    } else {
+                        if (currentLineLength > 0) {
+                            result += reset + '\n' + currentColor;
+                            currentLineLength = 0;
+                        }
+                        result += word;
+                        currentLineLength += wordLength;
+                    }
+                } else {
+                    result += word;
+                    currentLineLength += wordLength;
+                }
+                currentColor = nextColor;
+            }
+            return result;
+        }
+
         function onText(input) {
             if (input.charAt(0) !== '\x1B') {
                 input = default_color + input;
             }
             input = input.replaceAll(reset, default_color_reset);
             input = input.replaceAll(white, default_color);
-            if (prompt_is_printed) { // erase prompt
+            input = wrapText(input, termLeft.cols);
+
+            if (prompt_is_printed) {
                 wrapWrite('\r' + ' '.repeat(prompt_len) + '\r' + reset + input + reset + prompt);
             } else {
                 wrapWrite(reset + input + reset + prompt);
@@ -998,16 +1058,16 @@ window.addEventListener('load', () => {
                     // this command expects an array of strings to write sequentially to the terminal
                     let x = 0;
 
-                async function next() {
-                    x += 1;
-                    if (x >= msg[1].length) {
-                        wrapWrite(reset + '\x1B[?25h\n');
-                    } else {
-                        // slow down buffer playback if necessary
-                        //await sleep(0);
-                        wrapWrite(msg[1][x], next);
+                    async function next() {
+                        x += 1;
+                        if (x >= msg[1].length) {
+                            wrapWrite(reset + '\x1B[?25h\n');
+                        } else {
+                            // slow down buffer playback if necessary
+                            //await sleep(0);
+                            wrapWrite(msg[1][x], next);
+                        }
                     }
-                }
                     wrapWrite(msg[1][x], next)
                     break;
                 default:
