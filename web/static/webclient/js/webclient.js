@@ -1,5 +1,5 @@
 window.addEventListener('load', () => {
-    const revision = 2;
+    const revision = 3;
     const font = new FontFaceObserver('Fira Custom');
     font.load().then(() => {
         console.log('Font loaded.');
@@ -968,9 +968,9 @@ window.addEventListener('load', () => {
             if (input.charAt(0) !== '\x1B') {
                 input = default_color + input;
             }
+            input = wrapText(input, termLeft.cols);
             input = input.replaceAll(reset, default_color_reset);
             input = input.replaceAll(white, default_color);
-            input = wrapText(input, termLeft.cols);
 
             if (prompt_is_printed) {
                 wrapWrite('\r' + ' '.repeat(prompt_len) + '\r' + reset + input + reset + prompt);
